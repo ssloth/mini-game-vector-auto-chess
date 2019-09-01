@@ -4,9 +4,14 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HappyPack = require('happypack');
 const devMode = process.env.NODE_ENV === 'development';
 
+function resolve (dir) {
+  return path.join(__dirname, '.', dir)
+}
+
 const config = {
   watch: devMode,
   mode: devMode ? 'development' : 'production',
+  context: path.resolve(__dirname, './'),
   entry: {
     'game': './src/index.ts',
     'openDataContext/index': './src/openDataContext/index.ts'
@@ -18,7 +23,9 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    alias: {},
+    alias: {
+      '@': resolve('src/game')
+    },
   },
   module: {
     rules: [

@@ -10,10 +10,12 @@
 	},
 	"compileType": "game",
 	"libVersion": "2.5.0",
-	"appid": "wxbf2b2bc309fdac24",
+	"appid": "wx05268619ea4ce9e0",
 	"projectname": "wxgame-typescript-starter",
 	"cloudfunctionRoot": "functions/",
 	"packOptions": [],
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,

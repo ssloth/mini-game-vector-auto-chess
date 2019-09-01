@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "resolveJsonModule": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "declaration": false,
@@ -8,23 +9,15 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "lib": [
-      "dom",
-      "es5",
-      "es2015",
-    ],
-    "baseUrl": "./",
+    "lib": ["dom", "es5", "es2015"],
     "outDir": "./dist",
-    "paths": {}
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/game/*"]
+    }
   },
-  "include": [
-    "./src/**/*",
-  ],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ],
-  "files": [
-    "./typings/index.d.ts"
-  ]
+
+  "include": ["./src/**/*"],
+  "exclude": ["dist", "node_modules"],
+  "files": ["./typings/index.d.ts"]
 }

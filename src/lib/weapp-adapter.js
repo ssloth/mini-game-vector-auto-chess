@@ -1145,6 +1145,8 @@
 	  this.type = type;
 	};
 
+	window.TouchEvent = TouchEvent;
+
 	function touchEventHandlerFactory(type) {
 	  return function (event) {
 	    var touchEvent = new TouchEvent(type);
@@ -1222,7 +1224,15 @@
 	    }
 
 	    this['on' + type].apply(this, args);
-	  }
+		}
+		if (this.listener[type + "__bubble__"]) {
+			let fun = this.listener[type + "__bubble__"];
+			fun.apply(this);
+		}
+		if (this.listener[type]) {
+				let fun = this.listener[type];
+				fun.apply(this);
+		}
 	}
 
 	function _changeReadyState(readyState) {
@@ -1251,7 +1261,8 @@
 	    this.status = 0;
 	    this.statusText = '';
 	    this.upload = {};
-	    this.withCredentials = false;
+			this.withCredentials = false;
+			this.listener = {};
 
 	    _requestHeader.set(this, {
 	      'content-type': 'application/x-www-form-urlencoded'
@@ -1265,6 +1276,28 @@
 
 
 	  _createClass(XMLHttpRequest, [{
+			key:'addEventListener',
+			value: function addEventListener(type, fun, bubble) {
+				var listener = this.listener;
+				if (bubble) {
+						listener[type + "__bubble__"] = fun;
+				} else {
+						listener[type] = fun;
+				}
+				}
+		},
+		{
+			key:'removeEventListener',
+			value: function removeEventListener(type, fun, bubble) {
+					var listener = this.listener;
+					if (bubble) {
+							delete listener[type + "__bubble__"];
+					} else {
+							delete listener[type];
+					}
+			}
+		},
+		{
 	    key: 'abort',
 	    value: function abort() {
 	      var myRequestTask = _requestTask.get(this);
