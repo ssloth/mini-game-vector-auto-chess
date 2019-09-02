@@ -19,22 +19,40 @@ interface GameObservable {
 }
 
 export class Game {
+  private static instance = new Game();
+  private instance = Game.instance;
   private configuration: GameConfiguration;
   private scene: Scene;
   private store: Store;
-  private application: Application;
-  private ticker: ticker.Ticker;
-  private loader: loaders.Loader;
+  private _application: Application;
+  private _ticker: ticker.Ticker;
+  private _loader: loaders.Loader;
   public $: GameObservable;
 
-  constructor(configuration: GameConfiguration) {
+  get application(): Application {
+    return this._application;
+  }
+
+  get ticker(): ticker.Ticker {
+    return this._ticker;
+  }
+
+  get loaders(): loaders.Loader {
+    return this._loader;
+  }
+
+  static getInstance(): Game {
+    return Game.instance;
+  }
+
+  private constructor() {
     this.init();
   }
 
   private init(): void {
-    this.application = new Application({ backgroundColor: 0x1b1c17, view: canvas });
-    this.loader = new loaders.Loader();
-    this.ticker = this.application.ticker;
+    this._application = new Application({ backgroundColor: 0x1b1c17, view: canvas });
+    this._loader = new loaders.Loader();
+    this._ticker = this.application.ticker;
   }
 
   private start() {
@@ -44,10 +62,10 @@ export class Game {
   public load(...parmas: string[]) {
     return new Promise((resolve, reject) => {
       for (let i = 0; i < parmas.length; i++) {
-        this.loader.add(parmas[i]);
+        this._loader.add(parmas[i]);
       }
-      this.loader.load(() => {
-        resolve(this.loader);
+      this._loader.load(() => {
+        resolve(this._loader);
         this.start();
       });
     });
