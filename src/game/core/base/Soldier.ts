@@ -59,9 +59,7 @@ export abstract class Soldier extends Sprite {
   }
 
   /** 初始化 */
-  private create(): void {
-    this.game.application.stage.addChild(this);
-  }
+  private create(): void {}
 
   /** 事件 */
   private attack$: Observable<Soldier>; // 攻击

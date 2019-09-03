@@ -7,8 +7,8 @@ const game = Game.getInstance();
 game.load(...loader).then(() => {
   const textures = game.loaders.resources[tank].textures;
   const s = new Base(
-    100,
-    100,
+    50,
+    50,
     100,
     100,
     1000,
@@ -22,6 +22,10 @@ game.load(...loader).then(() => {
     1000,
     textures['tank-default.png']
   );
+
+  s.ticker$.subscribe(() => {
+    s.x += 0.1;
+  });
 });
 
 export default game;

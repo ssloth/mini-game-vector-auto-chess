@@ -29,18 +29,6 @@ export class Game {
   private _loader: loaders.Loader;
   public $: GameObservable;
 
-  get application(): Application {
-    return this._application;
-  }
-
-  get ticker(): ticker.Ticker {
-    return this._ticker;
-  }
-
-  get loaders(): loaders.Loader {
-    return this._loader;
-  }
-
   static getInstance(): Game {
     return Game.instance;
   }
@@ -52,7 +40,20 @@ export class Game {
   private init(): void {
     this._application = new Application({ backgroundColor: 0x1b1c17, view: canvas });
     this._loader = new loaders.Loader();
-    this._ticker = this.application.ticker;
+    this._ticker = this._application.ticker;
+  }
+
+
+  get application(): Application {
+    return this._application;
+  }
+
+  get ticker(): ticker.Ticker {
+    return this._ticker;
+  }
+
+  get loaders(): loaders.Loader {
+    return this._loader;
   }
 
   private start() {
