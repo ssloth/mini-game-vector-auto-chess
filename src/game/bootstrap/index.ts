@@ -24,14 +24,14 @@ game.load(...loader).then(() => {
     textures['tank-default.png']
   );
 
-  const bst = new BaseStatus(180, 180, textures['tank-default.png']);
+  const bst = new BaseStatus('BASE', 180, 180, textures['tank-default.png']);
 
   bs.addStatus(bst);
 
-  console.log(bst.width, bst.height);
-
+  const baseStatus: BaseStatus = <BaseStatus>bs.getStatus('BASE');
   bs.ticker$.subscribe(() => {
-    bs.x += 0.5;
+    bs.x += 0.1;
+    bs.y += 0.2;
   });
 });
 

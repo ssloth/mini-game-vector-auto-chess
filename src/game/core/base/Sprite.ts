@@ -8,12 +8,14 @@ export default abstract class Sprite extends pixi.Sprite {
   public game: Game = Game.getInstance();
   public collide$: Observable<Sprite>;
   public ticker$: Observable<Sprite>;
+  public data: any;
   constructor(x: number, y: number, width: number, height: number, textures: pixi.Texture) {
     super(textures);
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
+    this.data = {};
     this.init();
   }
 

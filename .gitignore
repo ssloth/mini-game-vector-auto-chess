@@ -6,5 +6,6 @@ $RECYCLE.BIN/
 # macOS
 .DS_Store
 
+game.js
 node_modules
 package-lock.json

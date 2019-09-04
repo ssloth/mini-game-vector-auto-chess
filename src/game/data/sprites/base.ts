@@ -1,2 +1,2 @@
 import Sprite from '@/core/base/Sprite';
-export class Base extends Sprite {}
+export class BaseStatusSprite extends Sprite {}

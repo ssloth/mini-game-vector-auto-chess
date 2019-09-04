@@ -80,4 +80,7 @@ export abstract class Soldier extends Sprite {
   public removeStatus(status: Status): Soldier {
     return this;
   }
+  public getStatus(label: string): Status {
+    return this.status.find(item => item.label === label);
+  }
 }
