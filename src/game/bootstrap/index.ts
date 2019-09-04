@@ -1,12 +1,13 @@
 import { Game } from '@/core/Game';
-import { Base } from '@/data/soldier/base';
+import { BaseSoldier } from '@/data/soldier/base';
 import loader from './loader';
 import { shape, tank } from './loader';
+import { BaseStatus } from '../data/status/BaseStatus';
 const game = Game.getInstance();
 
 game.load(...loader).then(() => {
   const textures = game.loaders.resources[tank].textures;
-  const s = new Base(
+  const bs = new BaseSoldier(
     50,
     50,
     100,
@@ -23,8 +24,14 @@ game.load(...loader).then(() => {
     textures['tank-default.png']
   );
 
-  s.ticker$.subscribe(() => {
-    s.x += 0.1;
+  const bst = new BaseStatus(180, 180, textures['tank-default.png']);
+
+  bs.addStatus(bst);
+
+  console.log(bst.width, bst.height);
+
+  bs.ticker$.subscribe(() => {
+    bs.x += 0.5;
   });
 });
 

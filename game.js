@@ -50545,6 +50545,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core_Game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/core/Game */ "./src/game/core/Game.ts");
 /* harmony import */ var _data_soldier_base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/data/soldier/base */ "./src/game/data/soldier/base.ts");
 /* harmony import */ var _loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./loader */ "./src/game/bootstrap/loader.ts");
+/* harmony import */ var _data_status_BaseStatus__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../data/status/BaseStatus */ "./src/game/data/status/BaseStatus.ts");
+
 
 
 
@@ -50553,9 +50555,12 @@ __webpack_require__.r(__webpack_exports__);
 var game = _core_Game__WEBPACK_IMPORTED_MODULE_1__["Game"].getInstance();
 game.load.apply(game, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(_loader__WEBPACK_IMPORTED_MODULE_3__["default"])).then(function () {
   var textures = game.loaders.resources[_loader__WEBPACK_IMPORTED_MODULE_3__["tank"]].textures;
-  var s = new _data_soldier_base__WEBPACK_IMPORTED_MODULE_2__["Base"](50, 50, 100, 100, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, textures['tank-default.png']);
-  s.ticker$.subscribe(function () {
-    s.x += 0.1;
+  var bs = new _data_soldier_base__WEBPACK_IMPORTED_MODULE_2__["BaseSoldier"](50, 50, 100, 100, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, textures['tank-default.png']);
+  var bst = new _data_status_BaseStatus__WEBPACK_IMPORTED_MODULE_4__["BaseStatus"](180, 180, textures['tank-default.png']);
+  bs.addStatus(bst);
+  console.log(bst.width, bst.height);
+  bs.ticker$.subscribe(function () {
+    bs.x += 0.5;
   });
 });
 /* harmony default export */ __webpack_exports__["default"] = (game);
@@ -50666,7 +50671,7 @@ function () {
         view: canvas
       });
       this._loader = new pixi_js__WEBPACK_IMPORTED_MODULE_3__["loaders"].Loader();
-      this._ticker = this.application.ticker;
+      this._ticker = this._application.ticker;
     }
   }, {
     key: "start",
@@ -50837,7 +50842,9 @@ function (_Sprite) {
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Soldier, [{
     key: "create",
-    value: function create() {}
+    value: function create() {
+      this.status = [];
+    }
     /** 事件 */
 
   }, {
@@ -50855,6 +50862,17 @@ function (_Sprite) {
     key: "move",
     value: function move() {} // 移动
 
+  }, {
+    key: "addStatus",
+    value: function addStatus(status) {
+      this.status.push(status.bindSoldier(this));
+      return this;
+    }
+  }, {
+    key: "removeStatus",
+    value: function removeStatus(status) {
+      return this;
+    }
   }]);
 
   return Soldier;
@@ -50925,7 +50943,7 @@ function (_pixi$Sprite) {
     _this.x = x;
     _this.y = y;
     _this.width = width;
-    _this.height = x;
+    _this.height = height;
 
     _this.init();
 
@@ -50963,16 +50981,114 @@ function (_pixi$Sprite) {
 
 /***/ }),
 
-/***/ "./src/game/data/soldier/base.ts":
-/*!***************************************!*\
-  !*** ./src/game/data/soldier/base.ts ***!
-  \***************************************/
-/*! exports provided: Base */
+/***/ "./src/game/core/base/Status.ts":
+/*!**************************************!*\
+  !*** ./src/game/core/base/Status.ts ***!
+  \**************************************/
+/*! exports provided: Status */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Base", function() { return Base; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Status", function() { return Status; });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _Sprite__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Sprite */ "./src/game/core/base/Sprite.ts");
+
+
+
+
+
+
+
+
+var Status =
+/*#__PURE__*/
+function (_Sprite) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default()(Status, _Sprite);
+
+  function Status(width, height, texture) {
+    var _this;
+
+    var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
+      x: 0,
+      y: 0
+    };
+
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, Status);
+
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(Status).call(this, 0, 0, width, height, texture));
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "offset", void 0);
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "soldier", void 0);
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "id", void 0);
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "label", void 0);
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "duration", void 0);
+
+    _this.id = Status.count++;
+    _this.offset = offset;
+    return _this;
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Status, [{
+    key: "setDuration",
+    value: function setDuration(duration) {
+      this.duration = duration;
+      return this;
+    }
+  }, {
+    key: "bindSoldier",
+    value: function bindSoldier(soldier) {
+      var _this2 = this;
+
+      this.soldier = soldier;
+      this.soldier.game.ticker.add(function () {
+        _this2.x = soldier.x + _this2.offset.x;
+        _this2.y = soldier.y + _this2.offset.y;
+      });
+      return this;
+    }
+  }, {
+    key: "unbindSoldier",
+    value: function unbindSoldier(soldier) {
+      this.soldier.removeStatus(this);
+      return this;
+    }
+  }]);
+
+  return Status;
+}(_Sprite__WEBPACK_IMPORTED_MODULE_7__["default"]);
+
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(Status, "count", 0);
+
+/***/ }),
+
+/***/ "./src/game/data/soldier/base.ts":
+/*!***************************************!*\
+  !*** ./src/game/data/soldier/base.ts ***!
+  \***************************************/
+/*! exports provided: BaseSoldier */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BaseSoldier", function() { return BaseSoldier; });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
@@ -50987,19 +51103,59 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var Base =
+var BaseSoldier =
 /*#__PURE__*/
 function (_Soldier) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Base, _Soldier);
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(BaseSoldier, _Soldier);
 
-  function Base() {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, Base);
+  function BaseSoldier() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, BaseSoldier);
 
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default()(Base).apply(this, arguments));
+    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default()(BaseSoldier).apply(this, arguments));
   }
 
-  return Base;
+  return BaseSoldier;
 }(_core_base_Soldier__WEBPACK_IMPORTED_MODULE_4__["Soldier"]);
+
+/***/ }),
+
+/***/ "./src/game/data/status/BaseStatus.ts":
+/*!********************************************!*\
+  !*** ./src/game/data/status/BaseStatus.ts ***!
+  \********************************************/
+/*! exports provided: BaseStatus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BaseStatus", function() { return BaseStatus; });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _core_base_Status__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/core/base/Status */ "./src/game/core/base/Status.ts");
+
+
+
+
+
+var BaseStatus =
+/*#__PURE__*/
+function (_Status) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(BaseStatus, _Status);
+
+  function BaseStatus() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, BaseStatus);
+
+    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default()(BaseStatus).apply(this, arguments));
+  }
+
+  return BaseStatus;
+}(_core_base_Status__WEBPACK_IMPORTED_MODULE_4__["Status"]);
 
 /***/ }),
 

@@ -13,7 +13,7 @@ export default abstract class Sprite extends pixi.Sprite {
     this.x = x;
     this.y = y;
     this.width = width;
-    this.height = x;
+    this.height = height;
     this.init();
   }
 

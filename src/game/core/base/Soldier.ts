@@ -26,7 +26,7 @@ export abstract class Soldier extends Sprite {
   /** 额外信息 */
   private camp: Camp; // 阵营
   private team: Team; // 队伍
-  private status: Status; // 当前状态
+  private status: Array<Status>; // 当前状态
 
   constructor(
     x: number,
@@ -59,7 +59,9 @@ export abstract class Soldier extends Sprite {
   }
 
   /** 初始化 */
-  private create(): void {}
+  private create(): void {
+    this.status = [];
+  }
 
   /** 事件 */
   private attack$: Observable<Soldier>; // 攻击
@@ -71,4 +73,11 @@ export abstract class Soldier extends Sprite {
   public attack(soldier: Soldier) {} // 攻击
   public releaseSkillr(soldier: Soldier) {} // 释放技能
   public move() {} // 移动
+  public addStatus(status: Status): Soldier {
+    this.status.push(status.bindSoldier(this));
+    return this;
+  }
+  public removeStatus(status: Status): Soldier {
+    return this;
+  }
 }
