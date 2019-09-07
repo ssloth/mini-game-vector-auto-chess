@@ -1,6 +1,6 @@
 import { Status } from '@/core/base/Status';
 import { Graphics } from 'pixi.js';
-
+import { BASE } from '@/config/status.config';
 /**
  * 基础状态 包扩血条等
  */
@@ -10,13 +10,13 @@ export class BaseStatus extends Status {
     const { x, y } = this;
     const innerBar = new Graphics();
     innerBar.beginFill(0x000000);
-    innerBar.drawRect(x, y, 128, 8);
+    innerBar.drawRect(x, y, BASE.WIDTH, BASE.HEIGHT);
     innerBar.endFill();
     this.addChild(innerBar);
 
-    const outerBar = new PIXI.Graphics();
-    outerBar.beginFill(0xff3300);
-    outerBar.drawRect(x, y, 128, 8);
+    const outerBar = new Graphics();
+    outerBar.beginFill(BASE.COLOR);
+    outerBar.drawRect(x, y, BASE.WIDTH, BASE.HEIGHT);
     outerBar.endFill();
     this.addChild(outerBar);
 
@@ -35,7 +35,6 @@ export class BaseStatus extends Status {
 
   public onTicker() {
     // TAG:2.在create添加了outerBar，打印出undefined
-    console.log(this.outerBar);
-    this.data.outerBar.width -= 0.1;
+    this.data.outerBar.width -= (BASE.WIDTH * this.soldier.hp) / this.soldier.HP;
   }
 }
