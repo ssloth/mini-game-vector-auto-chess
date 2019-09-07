@@ -29,12 +29,13 @@ export class BaseStatus extends Status {
 
   public onUpdate(): void {
     try {
+      this.soldier.hp -= 50;
     } catch (error) {}
   }
   public onDestory(): void {}
 
   public onTicker() {
     // TAG:2.在create添加了outerBar，打印出undefined
-    this.data.outerBar.width -= (BASE.WIDTH * this.soldier.hp) / this.soldier.HP;
+    this.data.outerBar.width = BASE.WIDTH * this.soldier.hpp;
   }
 }

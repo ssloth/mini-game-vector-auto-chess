@@ -1,9 +1,9 @@
-import { Application, loaders, ticker, Sprite } from 'pixi.js';
+import { Application, loaders, Sprite, loader, ticker } from 'pixi.js';
+const { pixelRatio, windowWidth, windowHeight } = wx.getSystemInfoSync();
 import { GameConfiguration } from '@/config/game.conf';
 import { Observable, fromEvent } from 'rxjs';
 import { Scene } from './Scene';
 import { Store } from './Store';
-import { tank, shape } from '@/bootstrap/loader';
 
 /**
  * 游戏类
@@ -20,10 +20,10 @@ interface GameObservable {
 
 export class Game {
   private static instance = new Game();
-  private instance = Game.instance;
   private configuration: GameConfiguration;
-  private scene: Scene;
-  private store: Store;
+  private scenes: Scene[];
+  private stores: Store;
+  private currentScene: Scene;
   private _application: Application;
   private _ticker: ticker.Ticker;
   private _loader: loaders.Loader;
@@ -38,11 +38,16 @@ export class Game {
   }
 
   private init(): void {
-    this._application = new Application({ backgroundColor: 0x1b1c17, view: canvas });
+    this._application = new Application({
+      width: windowWidth * pixelRatio,
+      height: windowHeight * pixelRatio,
+      backgroundColor: 0x1b1c17,
+      view: canvas,
+    });
     this._loader = new loaders.Loader();
     this._ticker = this._application.ticker;
+    this.scenes = [];
   }
-
 
   get application(): Application {
     return this._application;
@@ -56,8 +61,10 @@ export class Game {
     return this._loader;
   }
 
-  private start() {
+  public start(scene: Scene) {
     const app = this.application;
+    this.currentScene = scene;
+    this.currentScene.visible = true;
   }
 
   public load(...parmas: string[]) {
@@ -66,9 +73,29 @@ export class Game {
         this._loader.add(parmas[i]);
       }
       this._loader.load(() => {
-        resolve(this._loader);
-        this.start();
+        resolve(this.loaders.resources);
       });
     });
+  }
+
+  public addScene(scene: Scene): Game {
+    if (this.getScene(scene.name)) {
+      console.error(`场景${scene.name}重复!`);
+      return this;
+    }
+    this.scenes.push(scene);
+    return this;
+  }
+
+  public getScene(name: string): Scene {
+    return this.scenes.find(item => item.name === name);
+  }
+
+  public changeSence(name: string) {
+    this.currentScene.changeScene(name);
+  }
+
+  public getCurrentScene(): Scene {
+    return this.currentScene;
   }
 }

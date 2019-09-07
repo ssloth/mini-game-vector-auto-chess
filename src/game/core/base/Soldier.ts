@@ -55,15 +55,15 @@ export abstract class Soldier extends Sprite {
     texture: Texture
   ) {
     super(x, y, width, height, texture);
-    this.HP = HP;
-    this.MP = MP;
-    this.RNG = RNG;
-    this.AS = AS;
-    this.ATK = ATK;
-    this.ATS = ATS;
-    this.DEF = DEF;
-    this.ADF = ADF;
-    this.LEVEL = LEVEL;
+    this._HP = this.HP = HP;
+    this._MP = this.MP = MP;
+    this._RNG = this.RNG = RNG;
+    this._AS = this.AS = AS;
+    this._ATK = this.ATK = ATK;
+    this._ATS = this.ATS = ATS;
+    this._DEF = this.DEF = DEF;
+    this._ADF = this.ADF = ADF;
+    this._LEVEL = this.LEVEL = LEVEL;
     this.texture = texture;
     this.create();
   }
@@ -101,34 +101,43 @@ export abstract class Soldier extends Sprite {
     return Math.round(this._LEVEL);
   }
 
+  get hpp(): number {
+    const p = this._HP / this.HP;
+    return p > 1 ? 1 : p;
+  }
+
   set hp(n: number) {
-    if (n < 0) this._HP = 0;
-    this._HP = n;
+    if (n < 0) {
+      this._HP = 0;
+      this.onDie();
+    } else this._HP = n;
   }
 
   set mp(n: number) {
     if (n < 0) this._HP = 0;
-    this._MP = n;
+    else if (n > 100) {
+      this.onSkillReady();
+    } else this._MP = n;
   }
 
   set rng(n: number) {
     if (n < 0) this._HP = 0;
-    this._RNG = n;
+    else this._RNG = n;
   }
 
   set atk(n: number) {
     if (n < 0) this._HP = 0;
-    this._ATK = n;
+    else this._ATK = n;
   }
 
   set ats(n: number) {
     if (n < 0) this._HP = 0;
-    this._ATS = n;
+    else this._ATS = n;
   }
 
   set adf(n: number) {
     if (n < 0) this._HP = 0;
-    this._ADF = n;
+    else this._ADF = n;
   }
 
   set level(n: number) {
@@ -147,6 +156,10 @@ export abstract class Soldier extends Sprite {
   public attack(soldier: Soldier) {} // 攻击
   public releaseSkillr(soldier: Soldier) {} // 释放技能
   public move() {} // 移动
+
+  public findEnemy() {
+    const enemys = this.game;
+  }
   public addStatus(status: Status): Soldier {
     this.status.push(status.bindSoldier(this));
     return this;
@@ -156,5 +169,11 @@ export abstract class Soldier extends Sprite {
   }
   public getStatus(label: string): Status {
     return this.status.find(item => item.label === label);
+  }
+  public onDie() {
+    console.log('死亡！');
+  }
+  public onSkillReady() {
+    console.log('技能就绪！');
   }
 }

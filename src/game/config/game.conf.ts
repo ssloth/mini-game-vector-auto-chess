@@ -18,4 +18,11 @@ export default {
     height: window.innerHeight,
   },
 };
+
 export const SERVER = config.server;
+
+export const BOARD = {
+  PADDING: 50,
+  GARD_COUNT: 8,
+  INLINE_GARD_COUNT: 3,
+};
