@@ -19,6 +19,7 @@
     "@babel/preset-typescript": "^7.1.0",
     "@babel/runtime": "^7.2.0",
     "@types/node": "^12.7.4",
+    "@types/pixi.js": "^4.8.8",
     "@types/wegame-api": "^2.3.0",
     "babel-loader": "^8.0.4",
     "cross-env": "^5.2.0",
@@ -32,7 +33,9 @@
   },
   "dependencies": {
     "@pixi/unsafe-eval": "^5.0.4",
-    "pixi.js": "5.1.2",
+    "pixi-display": "^1.1.1",
+    "pixi-projection": "0.2",
+    "pixi.js": "4.8.8",
     "rxjs": "^6.5.2",
     "three": "^0.108.0"
   }

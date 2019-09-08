@@ -1,9 +1,10 @@
-import { Application, loaders, Sprite, loader, ticker } from 'pixi.js';
+import { Application, loaders, ticker } from 'pixi.js';
 const { pixelRatio, windowWidth, windowHeight } = wx.getSystemInfoSync();
 import { GameConfiguration } from '@/config/game.conf';
 import { Observable, fromEvent } from 'rxjs';
 import { Scene } from './Scene';
 import { Store } from './Store';
+import '@/utils/patch';
 
 /**
  * 游戏类
@@ -38,7 +39,7 @@ export class Game {
   }
 
   private init(): void {
-    this._application = new Application({
+    this._application = new PIXI.Application({
       width: windowWidth * pixelRatio,
       height: windowHeight * pixelRatio,
       backgroundColor: 0x1b1c17,
