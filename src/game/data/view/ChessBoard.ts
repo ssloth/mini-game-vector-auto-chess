@@ -33,33 +33,36 @@ export default class ChessBoard extends PIXI.projection.Camera3d {
   create() {
     const app = Game.getInstance().application;
     const container = new PIXI.projection.Container3d();
-    const boardSize = app.view.height - BOARD.PADDING * 2;
+    const boardSize = app.view.height;
     const gridSize = boardSize / BOARD.GARD_COUNT;
     const trans = (n: number) => gridSize * n; // 单位转换
-    const layout = {
-      offsetX: BOARD.PADDING, // 场景容器决定定位偏移值
-      offsetY: BOARD.PADDING, // 场景容器决定定位偏移值
-    };
-
     for (let i = 0; i <= BOARD.GARD_COUNT; i++) {
       for (let j = 0; j <= BOARD.GARD_COUNT; j++) {
-        const rs = new RectSprite(
-          gridSize,
-          layout.offsetX + trans(i),
-          layout.offsetY + trans(j),
-          this.player,
-          true
-        );
+        const rs = new RectSprite(gridSize, trans(i), trans(j), this.player, false);
         container.addChild(rs);
       }
     }
-    container.width = container.height = boardSize;
-    this.setPlanes(100, 100, 100, false);
-    this.position.set(app.screen.width / 2, 0);
-    // this.position3d.y = 100; // camera is above the ground
+    this.position.set(app.screen.width / 2, app.screen.height / 2);
+    this.setPlanes(350, 30, 10000);
+    this.euler.x = Math.PI / 25             ;
+    app.stage.addChild(this);
+
+    container.position3d.y = -50;
+    // MAKE CARDS LARGER:
+    container.scale3d.set(1.5);
+    // this.position.set(0, app.screen.height / 2);
+    // /2, app.screen.height/2)
+    // this.euler.x = Math.PI / 6;
+    // container.position3d.y = -500;
+    // container.scale3d.set(1.5);
+    // container.width = container.height = boardSize;
+    // this.setPlanes(1000, 10, 10000, true);
+    // this.position.set(0, 0);
+    // this.position3d.y = 10; // camera is above the ground
     // this.setPlanes(300, 30, 10000);
-    this.euler.x = Math.PI / 100;
-    // container.euler.x = Math.PI / 5;
+    // this.euler.x = Math.PI / 5;
+    // container.euler.x = -Math.PI / 5;
+    // container.position.set(boardSize/2, boardSize/2, 0);
     // container.euler.y = Math.PI / 5;
     this.addChild(container);
   }

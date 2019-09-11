@@ -48540,7 +48540,7 @@ var _env_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_re
 });
 var SERVER = _env_json__WEBPACK_IMPORTED_MODULE_0__["server"];
 var BOARD = {
-  PADDING: 50,
+  PADDING: 100,
   GARD_COUNT: 8,
   INLINE_GARD_COUNT: 3
 };
@@ -48908,7 +48908,6 @@ function (_Scene) {
       var app = _core_Game__WEBPACK_IMPORTED_MODULE_9__["Game"].getInstance().application;
       var player = new _core_Player__WEBPACK_IMPORTED_MODULE_12__["Player"](new _core_base_Camp__WEBPACK_IMPORTED_MODULE_11__["Camp"]('lzy'));
       var chessBoard = new _view_ChessBoard__WEBPACK_IMPORTED_MODULE_10__["default"](player);
-      chessBoard.position.x = (app.view.width - chessBoard.width) / 2;
       this.addChild(chessBoard);
     }
   }, {
@@ -49121,7 +49120,7 @@ function (_PIXI$projection$Came) {
     value: function create() {
       var app = _core_Game__WEBPACK_IMPORTED_MODULE_7__["Game"].getInstance().application;
       var container = new PIXI.projection.Container3d();
-      var boardSize = app.view.height - _config_game_conf__WEBPACK_IMPORTED_MODULE_8__["BOARD"].PADDING * 2;
+      var boardSize = app.view.height;
       var gridSize = boardSize / _config_game_conf__WEBPACK_IMPORTED_MODULE_8__["BOARD"].GARD_COUNT;
 
       var trans = function trans(n) {
@@ -49129,26 +49128,32 @@ function (_PIXI$projection$Came) {
       }; // 单位转换
 
 
-      var layout = {
-        offsetX: _config_game_conf__WEBPACK_IMPORTED_MODULE_8__["BOARD"].PADDING,
-        // 场景容器决定定位偏移值
-        offsetY: _config_game_conf__WEBPACK_IMPORTED_MODULE_8__["BOARD"].PADDING // 场景容器决定定位偏移值
-
-      };
-
       for (var i = 0; i <= _config_game_conf__WEBPACK_IMPORTED_MODULE_8__["BOARD"].GARD_COUNT; i++) {
         for (var j = 0; j <= _config_game_conf__WEBPACK_IMPORTED_MODULE_8__["BOARD"].GARD_COUNT; j++) {
-          var rs = new RectSprite(gridSize, layout.offsetX + trans(i), layout.offsetY + trans(j), this.player, true);
+          var rs = new RectSprite(gridSize, trans(i), trans(j), this.player, false);
           container.addChild(rs);
         }
       }
 
-      container.width = container.height = boardSize;
-      this.setPlanes(100, 100, 100, false);
-      this.position.set(app.screen.width / 2, 0); // this.position3d.y = 100; // camera is above the ground
-      // this.setPlanes(300, 30, 10000);
+      this.position.set(app.screen.width / 2, app.screen.height / 2);
+      this.setPlanes(350, 30, 10000);
+      this.euler.x = Math.PI / 25;
+      app.stage.addChild(this);
+      container.position3d.y = -50; // MAKE CARDS LARGER:
 
-      this.euler.x = Math.PI / 100; // container.euler.x = Math.PI / 5;
+      container.scale3d.set(1.5); // this.position.set(0, app.screen.height / 2);
+      // /2, app.screen.height/2)
+      // this.euler.x = Math.PI / 6;
+      // container.position3d.y = -500;
+      // container.scale3d.set(1.5);
+      // container.width = container.height = boardSize;
+      // this.setPlanes(1000, 10, 10000, true);
+      // this.position.set(0, 0);
+      // this.position3d.y = 10; // camera is above the ground
+      // this.setPlanes(300, 30, 10000);
+      // this.euler.x = Math.PI / 5;
+      // container.euler.x = -Math.PI / 5;
+      // container.position.set(boardSize/2, boardSize/2, 0);
       // container.euler.y = Math.PI / 5;
 
       this.addChild(container);

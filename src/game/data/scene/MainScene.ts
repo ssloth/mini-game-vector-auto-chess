@@ -16,7 +16,6 @@ export default class MainScene extends Scene {
     const app = Game.getInstance().application;
     const player = new Player(new Camp('lzy'));
     const chessBoard = new ChessBoard(player);
-    chessBoard.position.x = (app.view.width - chessBoard.width) / 2;
     this.addChild(chessBoard);
   }
 
