@@ -1,7 +1,8 @@
-import { Application, loaders, ticker } from 'pixi.js';
 const { pixelRatio, windowWidth, windowHeight } = wx.getSystemInfoSync();
+import { Application, loaders, ticker } from 'pixi.js';
 import { GameConfiguration } from '@/config/game.conf';
 import { Observable, fromEvent } from 'rxjs';
+import * as THREE from 'three';
 import { Scene } from './Scene';
 import { Store } from './Store';
 import '@/utils/patch';
@@ -22,7 +23,9 @@ interface GameObservable {
 export class Game {
   private static instance = new Game();
   private configuration: GameConfiguration;
-  private scenes: Scene[];
+  private _renderer: THREE.WebGLRenderer;
+  private _scenes: THREE.Scene;
+  private _camera: THREE.PerspectiveCamera;
   private stores: Store;
   private currentScene: Scene;
   private _application: Application;
@@ -39,15 +42,14 @@ export class Game {
   }
 
   private init(): void {
-    this._application = new PIXI.Application({
-      width: windowWidth * pixelRatio,
-      height: windowHeight * pixelRatio,
-      backgroundColor: 0x1b1c17,
-      view: canvas,
+    this._renderer = new THREE.WebGLRenderer({
+      context: canvas.getContext('webgl'),
+      antialias: true,
     });
+    this._renderer.setSize(windowWidth * pixelRatio, windowHeight * pixelRatio);
+    this._renderer.setClearColor(0xee9999, 1);
     this._loader = new loaders.Loader();
     this._ticker = this._application.ticker;
-    this.scenes = [];
   }
 
   get application(): Application {
