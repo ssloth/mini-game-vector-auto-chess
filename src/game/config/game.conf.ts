@@ -22,7 +22,7 @@ export default {
 export const SERVER = config.server;
 
 export const BOARD = {
-  PADDING: 100,
+  SIZE: 60,
   GARD_COUNT: 8,
   INLINE_GARD_COUNT: 3,
 };

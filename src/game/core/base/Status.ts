@@ -52,10 +52,10 @@ export abstract class Status extends Sprite {
    */
   public bindSoldier(soldier: Soldier): Status {
     this.soldier = soldier;
-    this.soldier.game.ticker.add(() => {
-      this.x = soldier.x + this.offset.x;
-      this.y = soldier.y + this.offset.y;
-    });
+    // this.soldier.game.ticker.add(() => {
+    //   this.x = soldier.x + this.offset.x;
+    //   this.y = soldier.y + this.offset.y;
+    // });
     return this;
   }
 

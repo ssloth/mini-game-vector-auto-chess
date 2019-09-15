@@ -1,21 +1,19 @@
-import { Container } from 'pixi.js';
+import * as THREE from 'three';
 import { Game } from './Game';
-export abstract class Scene extends Container {
+export abstract class Scene extends THREE.Scene {
   public name: string;
   constructor(name: string) {
     super();
     this.onCreate();
     this.visible = false;
     this.name = name;
-    Game.getInstance().application.stage.addChild(this);
   }
 
   public changeScene(name: string) {
-    const target: Scene = Game.getInstance().getScene(name);
+    const game = Game.getInstance();
     this.onHidden();
-    this.visible = false;
-    target.onShow();
-    target.visible = true;
+    game.changeSence(name);
+    game.getScene(name).onShow();
   }
 
   public abstract onCreate(): void;

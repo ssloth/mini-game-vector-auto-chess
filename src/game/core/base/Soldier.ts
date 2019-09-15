@@ -64,7 +64,7 @@ export abstract class Soldier extends Sprite {
     this._DEF = this.DEF = DEF;
     this._ADF = this.ADF = ADF;
     this._LEVEL = this.LEVEL = LEVEL;
-    this.texture = texture;
+    // this.texture = texture;
     this.create();
   }
 
