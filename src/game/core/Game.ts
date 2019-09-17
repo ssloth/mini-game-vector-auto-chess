@@ -5,8 +5,7 @@ import { Observable, fromEvent } from 'rxjs';
 import { Scene } from './Scene';
 import { Store } from './Store';
 import '@/utils/patch';
-import MTLLoader from 'three-mtl-loader';
-import OBJLoader from 'three-obj-loader';
+import { OBJLoader, MTLLoader } from 'three-obj-mtl-loader';
 
 canvas.height = windowHeight;
 canvas.width = windowWidth;
@@ -94,7 +93,6 @@ export class Game {
     this._mtlLoader = new MTLLoader();
     this._objLoader = new OBJLoader();
     this.scenesManager = [];
-
   }
 
   public start(scene: Scene) {

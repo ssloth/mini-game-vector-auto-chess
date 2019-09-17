@@ -1165,13 +1165,24 @@
 	var _requestTask = new WeakMap()
 
 	function _triggerEvent(type) {
-	  if (typeof this['on' + type] === 'function') {
-	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	      args[_key - 1] = arguments[_key]
-	    }
 
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key]
+		}
+
+	  if (typeof this['on' + type] === 'function') {
 	    this['on' + type].apply(this, args)
-	  }
+		}
+		
+		if (this.listener[type + "__bubble__"]) {
+				let fun = this.listener[type + "__bubble__"];
+				fun.apply(this,args);
+		}
+
+		if (this.listener[type]) {
+				let fun = this.listener[type];
+				fun.apply(this,args);
+		}
 	}
 
 	function _changeReadyState(readyState) {
@@ -1285,6 +1296,11 @@
 	          header: _requestHeader.get(this),
 	          responseType: this.responseType,
 	          success: function success(_ref) {
+
+							const e = {
+								target:{}
+							}
+
 	            var data = _ref.data,
 	                statusCode = _ref.statusCode,
 	                header = _ref.header
@@ -1316,9 +1332,10 @@
 	            } else {
 	              _this.responseText = data
 	            }
-	            _changeReadyState.call(_this, XMLHttpRequest.DONE)
-	            _triggerEvent.call(_this, 'load')
-	            _triggerEvent.call(_this, 'loadend')
+							_changeReadyState.call(_this, XMLHttpRequest.DONE)
+							e.target.response = data
+	            _triggerEvent.call(_this, 'load', e)
+	            _triggerEvent.call(_this, 'loadend', e)
 	          },
 	          fail: function fail(_ref2) {
 	            var errMsg = _ref2.errMsg

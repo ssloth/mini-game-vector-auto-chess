@@ -5,6 +5,7 @@ import { BOARD } from '@/config/game.conf';
 import { rect } from '@/bootstrap/loader';
 import { Player } from '@/core/Player';
 import { Scene } from '@/core/Scene';
+import { drawPolygon } from '../../utils/draw';
 
 /**
  * 战斗棋盘背景 为正方形状,
@@ -60,29 +61,6 @@ export default class ChessBoard {
         drawPalne(x - (trans - GridSize) / 2, y - (trans - GridSize) / 2 + offsetY, 1);
       }
     }
-
-    // const geom = new THREE.PlaneGeometry(10, 10);
-    // const mat = new THREE.MeshBasicMaterial({
-    //   color: 0x3377dd,
-    //   transparent: true,
-    //   opacity: 0.65,
-    //   wireframe: false,
-    // });
-    // const cube = new THREE.Mesh(geom, mat);
-    // cube.position.z = 1.1;
-    // this.scene.add(cube);
-
-    game.mtlLoader.load(mtl, matl => {
-      console.log(111111111111111)
-      matl.preload(obj);
-      game.objLoader.setMaterials(matl);
-      game.objLoader.load('tinker.obj', object => {
-        object.position.x = 10;
-        object.position.y = 10;
-        object.position.z = 100;
-        this.scene.add(object);
-      });
-    });
   }
 
   ready() {}
