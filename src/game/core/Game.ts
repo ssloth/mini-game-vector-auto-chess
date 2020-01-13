@@ -5,6 +5,7 @@ import { Observable, fromEvent } from 'rxjs';
 import { Scene } from './Scene';
 import { Store } from './Store';
 import '@/utils/patch';
+import { Camp } from './base/Camp';
 
 /**
  * 游戏类
@@ -23,6 +24,7 @@ export class Game {
   private static instance = new Game();
   private configuration: GameConfiguration;
   private scenes: Scene[];
+  private camps: Camp[];
   private stores: Store;
   private currentScene: Scene;
   private _application: Application;
@@ -48,6 +50,7 @@ export class Game {
     this._loader = new loaders.Loader();
     this._ticker = this._application.ticker;
     this.scenes = [];
+    this.camps = [];
   }
 
   get application(): Application {
@@ -79,7 +82,21 @@ export class Game {
     });
   }
 
+  public addCamp(camp: Camp): Game {
+    if (this.getScene(camp.name)) {
+      console.error(`阵营${camp.name}重复!`);
+      return this;
+    }
+    this.camps.push(camp);
+    return this;
+  }
+
+  public getCamp(name: string): Camp {
+    return this.camps.find(item => item.name === name);
+  }
+
   public addScene(scene: Scene): Game {
+    console.log('添加场景', scene);
     if (this.getScene(scene.name)) {
       console.error(`场景${scene.name}重复!`);
       return this;

@@ -9,13 +9,10 @@ import '@/utils/patch';
 
 const game = Game.getInstance();
 game.load(...loader).then(item => {
-  const menuScene = new MenuScene('menu');
-  const mainSence = new MainScene('main');
-
   game
-    .addScene(menuScene)
-    .addScene(mainSence)
-    .start(menuScene);
+    .addScene(MenuScene.getInstance())
+    .addScene(MainScene.getInstance())
+    .start(MenuScene.getInstance());
 });
 
 export default game;

@@ -1,8 +1,9 @@
 import { Status } from '@/core/base/Status';
 import { Graphics } from 'pixi.js';
 import { BASE } from '@/config/status.config';
+
 /**
- * 基础状态 包扩血条等
+ * 基础状态 血条等
  */
 export class BaseStatus extends Status {
   outerBar: Graphics;
@@ -32,6 +33,7 @@ export class BaseStatus extends Status {
       this.soldier.hp -= 50;
     } catch (error) {}
   }
+
   public onDestory(): void {}
 
   public onTicker() {

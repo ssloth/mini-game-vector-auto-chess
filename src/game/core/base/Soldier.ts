@@ -4,7 +4,8 @@ import { Skill } from './Skill';
 import { Status } from './Status';
 import { Camp } from './Camp';
 import { Team } from './Team';
-import { Texture } from 'pixi.js';
+import { Texture, Container } from 'pixi.js';
+import MainScene from '../../data/scene/MainScene';
 
 const MAX_LEVEL = 3;
 /**
@@ -65,13 +66,12 @@ export abstract class Soldier extends Sprite {
     this._ADF = this.ADF = ADF;
     this._LEVEL = this.LEVEL = LEVEL;
     this.texture = texture;
-    this.create();
+    this.status = [];
+    this.onCreate();
   }
 
   /** 初始化 */
-  private create(): void {
-    this.status = [];
-  }
+  public onCreate() { }
 
   get hp(): number {
     return Math.round(this._HP);
@@ -152,27 +152,34 @@ export abstract class Soldier extends Sprite {
   private status$: Observable<Soldier>; // 状态
   private die$: Observable<Soldier>; // 死亡
 
-  /** 行为 */
-  public attack(soldier: Soldier) {} // 攻击
-  public releaseSkillr(soldier: Soldier) {} // 释放技能
-  public move() {} // 移动
+  /** 方法 */
+  public abstract draw(Scene);
+  public abstract animation();
 
-  public findEnemy() {
-    const enemys = this.game;
-  }
+  /** 行为 */
+  public abstract attack(soldier: Soldier); // 攻击
+  public abstract releaseSkillr(soldier: Soldier); // 释放技能
+  public abstract move(); // 移动
+
+  public abstract findEnemy();
+
   public addStatus(status: Status): Soldier {
     this.status.push(status.bindSoldier(this));
     return this;
   }
+
   public removeStatus(status: Status): Soldier {
     return this;
   }
+
   public getStatus(label: string): Status {
     return this.status.find(item => item.label === label);
   }
+
   public onDie() {
     console.log('死亡！');
   }
+
   public onSkillReady() {
     console.log('技能就绪！');
   }

@@ -9,16 +9,26 @@ const style = new TextStyle({
 });
 
 export default class MenuScene extends Scene {
+  private static instance;
+
+  static getInstance(): Scene {
+    if (MenuScene.instance) return MenuScene.instance;
+    return (MenuScene.instance = new MenuScene('menu'));
+  }
+
   public onCreate(): void {
     const { height } = Game.getInstance().application.view;
-    this.drawMenuItem('单机模式', height * 0.3).on('tap', () => {});
+
+    this.drawMenuItem('单机模式', height * 0.3).on('tap', () => {
+      this.changeScene('main');
+    });
     this.drawMenuItem('多人对战', height * 0.4).addListener('click', () => {});
     this.drawMenuItem('联盟模式', height * 0.5).addListener('click', () => {});
     this.drawMenuItem('退出', height * 0.6).addListener('click', () => {});
 
     setTimeout(() => {
       this.changeScene('main');
-    }, 1000);
+    }, 2000);
   }
 
   public onShow(): void {}
