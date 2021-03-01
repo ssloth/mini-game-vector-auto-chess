@@ -37,6 +37,6 @@
     "pixi-projection": "0.2",
     "pixi.js": "4.8.8",
     "rxjs": "^6.5.2",
-    "three": "^0.108.0"
+    "three": "^0.125.0"
   }
 }
